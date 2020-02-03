@@ -22,7 +22,7 @@ public class MatchDataServiceImplementation implements MatchDataService {
     }
 
     @Override
-    public List<MatchData> findRecords(String liveStatus, String statusType, Pageable pageable) {
+    public List<MatchData> findMatchData(String liveStatus, String statusType, Pageable pageable) {
         MatchDataFilter matchDataFilter = new MatchDataFilter();
         matchDataFilter.setLiveStatus(liveStatus);
         matchDataFilter.setStatusType(statusType);

@@ -9,6 +9,6 @@ import java.util.List;
 @Service
 public interface MatchDataService {
 
-    List<MatchData> findRecords(String liveStatus, String statusType, Pageable pageable);
+    List<MatchData> findMatchData(String liveStatus, String statusType, Pageable pageable);
 
 }

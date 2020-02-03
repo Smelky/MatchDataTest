@@ -21,75 +21,68 @@ import static org.junit.Assert.assertEquals;
 public class DataFilterTest {
 
     @Autowired
-    private TestEntityManager entityManager;
+    private TestEntityManager testEntityManager;
 
     @Autowired
-    private MatchDataRepository recordRepository;
+    private MatchDataRepository matchDataRepository;
 
     @Before
-    public void loadData(){
-        for (int i = 0; i < 2; i++) {
-            MatchData matchData = new MatchData();
-            matchData.setId("id" + i);
-            matchData.setLiveStatus("inprogress");
-            Status status = new Status();
-            status.setType("HT");
-            matchData.setStatus(status);
-            entityManager.persist(matchData);
-        }
+    public void updateTestData() {
 
         for (int i = 0; i < 4; i++) {
             MatchData matchData = new MatchData();
-            matchData.setId("id" + i + 10);
+            matchData.setId("id" + i);
             matchData.setLiveStatus("cancelled");
             Status status = new Status();
             status.setType("FT");
             matchData.setStatus(status);
-            entityManager.persist(matchData);
+            testEntityManager.persist(matchData);
         }
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
             MatchData matchData = new MatchData();
-            matchData.setId("id" + i + 20);
+            matchData.setId("id" + i + 7);
+            matchData.setLiveStatus("inprogress");
+            Status status = new Status();
+            status.setType("HT");
+            matchData.setStatus(status);
+            testEntityManager.persist(matchData);
+        }
+
+        for (int i = 0; i < 3; i++) {
+            MatchData matchData = new MatchData();
+            matchData.setId("id" + i + 15);
             matchData.setLiveStatus("inprogress");
             Status status = new Status();
             status.setType("FT");
             matchData.setStatus(status);
-            entityManager.persist(matchData);
+            testEntityManager.persist(matchData);
         }
-
-        entityManager.flush();
+        testEntityManager.flush();
     }
 
     @Test
-    public void onlyInprogressRecordsShouldBeReturned(){
-        MatchDataFilter liveStatusOnlySpecification = new MatchDataFilter();
-        liveStatusOnlySpecification.setLiveStatus("inprogress");
-
-        Page<MatchData> liveStatusRecords = recordRepository.findAll(liveStatusOnlySpecification, Pageable.unpaged());
-
-        assertEquals(7, liveStatusRecords.getTotalElements());
-
+    public void ShouldGetOnlyFTAndInprogressMatchData() {
+        MatchDataFilter matchDataFilterFTAndInprogressOnly = new MatchDataFilter();
+        matchDataFilterFTAndInprogressOnly.setStatusType("FT");
+        matchDataFilterFTAndInprogressOnly.setLiveStatus("inprogress");
+        Page<MatchData> FTAndInprogressMatchData = matchDataRepository.findAll(matchDataFilterFTAndInprogressOnly, Pageable.unpaged());
+        assertEquals(3, FTAndInprogressMatchData.getTotalElements());
     }
 
     @Test
-    public void onlyFTStatusTypeRecordsShouldBeReturned(){
-        MatchDataFilter statusTypeSpecification = new MatchDataFilter();
-        statusTypeSpecification.setStatusType("FT");
-
-        Page<MatchData> statusTypeRecords = recordRepository.findAll(statusTypeSpecification, Pageable.unpaged());
-
-        assertEquals(9, statusTypeRecords.getTotalElements());
+    public void ShouldGetOnlyFTMatchData() {
+        MatchDataFilter matchDataFilterStatusTypeOnly = new MatchDataFilter();
+        matchDataFilterStatusTypeOnly.setStatusType("FT");
+        Page<MatchData> StatusTypeMatchData = matchDataRepository.findAll(matchDataFilterStatusTypeOnly, Pageable.unpaged());
+        assertEquals(7, StatusTypeMatchData.getTotalElements());
     }
 
     @Test
-    public void onlyFTAndInprogressRecordsShouldBeReturned(){
-        MatchDataFilter matchDataFilter = new MatchDataFilter();
-        matchDataFilter.setStatusType("FT");
-        matchDataFilter.setLiveStatus("inprogress");
-
-        Page<MatchData> records = recordRepository.findAll(matchDataFilter, Pageable.unpaged());
-
-        assertEquals(5, records.getTotalElements());
+    public void ShouldGetOnlyInprogressMatchData() {
+        MatchDataFilter matchDataFilterLiveStatusOnly = new MatchDataFilter();
+        matchDataFilterLiveStatusOnly.setLiveStatus("inprogress");
+        Page<MatchData> liveStatusMatchData = matchDataRepository.findAll(matchDataFilterLiveStatusOnly, Pageable.unpaged());
+        assertEquals(9, liveStatusMatchData.getTotalElements());
     }
 }

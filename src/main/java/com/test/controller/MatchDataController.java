@@ -1,6 +1,7 @@
 package com.test.controller;
 
 import com.test.entity.MatchData;
+import com.test.service.MatchDataServiceImplementation;
 import com.test.service.interfaces.MatchDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +29,7 @@ public class MatchDataController {
                                                         @RequestParam(required = false) String statusType,
                                                         Pageable pageable) {
 
-        List<MatchData> matchData = matchDataService.findRecords(liveStatus, statusType, pageable);
+        List<MatchData> matchData = matchDataService.findMatchData(liveStatus, statusType, pageable);
         return ResponseEntity.ok(matchData);
     }
 

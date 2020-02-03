@@ -1,6 +1,5 @@
 package com.test.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -17,6 +16,4 @@ public class Round {
     private Integer id;
 
     private Integer round;
-
-    private String name;
 }
